@@ -36,6 +36,9 @@ while 1:
                 
                 try:
                     seq, command, args = message.split(" ", 2)
+                    
+                    seq_num_validation = int(seq)
+                    
                 except:
                     connectionSocket.send(f"0 NOK".encode("ascii"))   # [SEQ] NOK
                     connectionSocket.close()
@@ -57,9 +60,14 @@ while 1:
                 # Obtenção de [sequência][comando] possível [args]
                 try:
                     seq, command, args = message.split(" ", 2)
+                    
+                    seq_num_validation = int(seq)
                 except:
                     try:
                         seq, command = message.split(" ", 1)
+                        
+                        seq_num_validation = int(seq)
+                    
                     # Caso a mensagem não esteja nos padrões informados, retorna um NOK.
                     except:
                         connectionSocket.send(f"0 NOK".encode("ascii"))   # [SEQ] NOK
@@ -84,10 +92,13 @@ while 1:
                     try:
                         size = os.path.getsize(f"{files_path}/{args}")
                         
-                        with open(f"{files_path}/{args}", "r") as file:
+                        with open(f"{files_path}/{args}", "rb") as file:
                             data = file.read()
                         
-                        connectionSocket.send(f"{seq} ARQ {size} {data}".encode("ascii"))   # [SEQ] ARQ <tam> <dados>
+                        if args.split(".")[1] == "png":
+                            connectionSocket.send(f"{seq} ARQ {size} ".encode("ascii") + data)
+                        else:
+                            connectionSocket.send(f"{seq} ARQ {size} {data}".encode("ascii"))   # [SEQ] ARQ <tam> <dados>
                         
                     except:
                         connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK

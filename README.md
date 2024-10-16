@@ -7,7 +7,7 @@
 
 Python Versão 3.8 ou mais atual instalada no sistema. A versão pode ser verificada por meio de:
 ```bash
-   python --version
+python --version
 ```
 Para clonar este repositório do Github, utilize:
 
