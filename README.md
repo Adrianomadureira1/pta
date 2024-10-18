@@ -1,8 +1,3 @@
-# Estrutura do Projeto
-
-- ./pta-client.py: Refere-se a implementação do socket cliente.
-- ./pta-server/pta-server.py: Refere-se a implementação do socket servidor.
-
 # Dependências do Projeto
 
 Python Versão 3.8 ou mais atual instalada no sistema. A versão pode ser verificada por meio de:
@@ -31,12 +26,17 @@ pip install -r requirements.txt
 
 # Execução do PTA
 
-Execute o processo servidor por meio do comando: 
+Primeiramente, inicie o processo servidor por meio do seguinte comando na pasta raiz do repositório: 
 ```bash
 python pta-server/pta-server.py
 ```
-Execute o processo cliente por meio do comando:
+O processo cliente de código fornecido pode ser executado pelo seguinte comando na pasta raiz:
 
 ```bash
-python pta-client.py
+python pta-client.py 127.0.0.1 11550 user1
+```
+
+Com o servidor em estado de operação e o Pytest instalado no ambiente virtual, é possível executar todos os testes elaborados para o PTA por meio do comando:
+```bash
+pytest -vv
 ```

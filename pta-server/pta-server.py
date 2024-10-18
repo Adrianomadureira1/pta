@@ -55,13 +55,17 @@ while 1:
                     state = "ready"
             
             elif state == "ready":
-                message = connectionSocket.recv(1024).decode()
+                message = connectionSocket.recv(2048).decode()
                 
                 # Obtenção de [sequência][comando] possível [args]
                 try:
                     seq, command, args = message.split(" ", 2)
                     
                     seq_num_validation = int(seq)
+                    
+                    if args == "":
+                        raise ValueError
+                    
                 except:
                     try:
                         seq, command = message.split(" ", 1)

@@ -137,7 +137,7 @@ def test4(sckt,arq,bad):
   data2 = None
   while 1:
     data, addr = sckt.recvfrom(2048)
-    data = data.decode()
+    data = data.decode() # Para o caso do .png, isto deve falhar! O arquivo .png já está codificado em bytes e é diretamente enviado.
     if commandUnknow:
         try:
             commandUnknow = False
@@ -217,6 +217,7 @@ if __name__ == "__main__":
   print("Points: %d/6" % points)
   if not arqs == "":
     arq = random.choice(arqs)
+    print(arq)
   else:
     arq = "teste"
 
