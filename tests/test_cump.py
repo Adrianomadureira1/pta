@@ -45,7 +45,7 @@ def test_good_cump(client_socket):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
     
@@ -57,7 +57,7 @@ def test_good_cump(client_socket):
     
     assert expected_message == returned_message.decode()
     
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())
 
 def test_bad_cump(client_socket, cump_param):
     """Teste do case sensitive no argumento do CUMP."""
@@ -67,7 +67,7 @@ def test_bad_cump(client_socket, cump_param):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
     
@@ -79,4 +79,4 @@ def test_bad_cump(client_socket, cump_param):
     
     assert expected_message == returned_message
     
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())

@@ -35,7 +35,7 @@ def client_socket():
 
     # Envia mensagem
 
-    clientSocket.send(message.encode("ascii"))
+    clientSocket.send(message.encode())
     
     returned_message, addr = clientSocket.recvfrom(2048)
 
@@ -49,11 +49,11 @@ def test_bad_term(client_socket, term_param):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
     
-    expected_message = term_param["expected"].encode("ascii")
+    expected_message = term_param["expected"].encode()
 
     # Recebe o retorno do servidor
 
@@ -62,7 +62,7 @@ def test_bad_term(client_socket, term_param):
     assert expected_message == returned_message
     
     # Envia o TERM correto para finalizar a conexão e reiniciar o teste com outro formato de mensagem.
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())
 
 def test_good_term(client_socket):
     """Teste do caminho 'feliz' para o TERM."""   
@@ -76,11 +76,11 @@ def test_good_term(client_socket):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
     
-    expected_message = f"{seq_num} OK".encode("ascii")
+    expected_message = f"{seq_num} OK".encode()
     
     # Recebe o retorno do servidor
 
@@ -89,4 +89,4 @@ def test_good_term(client_socket):
     assert expected_message == returned_message
     
     # Envia o TERM correto para finalizar a conexão.
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())

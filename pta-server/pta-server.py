@@ -34,31 +34,36 @@ while 1:
                 connectionSocket, address = serverSocket.accept()
                 message = connectionSocket.recv(1024).decode()
                 
+                seq = ""
+                command = ""
+                args = ""
+                
                 try:
                     seq, command, args = message.split(" ", 2)
                     
                     seq_num_validation = int(seq)
                     
                 except:
-                    connectionSocket.send(f"0 NOK".encode("ascii"))   # [SEQ] NOK
+                    connectionSocket.send(f"0 NOK".encode())   # [SEQ] NOK
                     connectionSocket.close()
                     continue
                 
                 # Comando CUMP
                 # Recebe [SEQ_NUM][COMMAND][ARGS]
                 if command != "CUMP" or args not in users:
-                    connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK
+                    connectionSocket.send(f"{seq} NOK".encode())   # [SEQ] NOK
                     connectionSocket.close()
                     
                 else:
-                    connectionSocket.send(f"{seq} OK".encode("ascii"))    # [SEQ] OK
+                    connectionSocket.send(f"{seq} OK".encode())    # [SEQ] OK
                     state = "ready"
             
             elif state == "ready":
-                message = connectionSocket.recv(2048).decode()
+                message = connectionSocket.recv(1024).decode()
                 
                 # Obtenção de [sequência][comando] possível [args]
                 try:
+                    #breakpoint()
                     seq, command, args = message.split(" ", 2)
                     
                     seq_num_validation = int(seq)
@@ -74,7 +79,7 @@ while 1:
                     
                     # Caso a mensagem não esteja nos padrões informados, retorna um NOK.
                     except:
-                        connectionSocket.send(f"0 NOK".encode("ascii"))   # [SEQ] NOK
+                        connectionSocket.send(f"0 NOK".encode())   # [SEQ] NOK
                         continue
                     
                 if command == "LIST":
@@ -85,27 +90,28 @@ while 1:
                         files_list = os.listdir(files_path)
                         num = len(files_list)
                         arqs = ",".join(files_list)
-                        connectionSocket.send(f"{seq} ARQS {num} {arqs}".encode("ascii"))   # [SEQ] ARQS <num> nome1,nome2,nome3...
+                        connectionSocket.send(f"{seq} ARQS {num} {arqs}".encode())   # [SEQ] ARQS <num> nome1,nome2,nome3...
                     except:
-                        connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK
+                        connectionSocket.send(f"{seq} NOK".encode())   # [SEQ] NOK
                     
                 elif command == "PEGA":
                     # Comando PEGA
                     # Recebe  [SEQ_NUM][COMMAND][ARGS] <=> <seq> PEGA <nome>
                     # Retorna [SEQ_NUM][REPLY][ARGS]   <=> <seq> ARQ <tam> <dados> | <seq> NOK
+                    #breakpoint()
+                    
                     try:
-                        size = os.path.getsize(f"{files_path}/{args}")
-                        
-                        with open(f"{files_path}/{args}", "rb") as file:
-                            data = file.read()
-                        
-                        if args.split(".")[1] == "png":
-                            connectionSocket.send(f"{seq} ARQ {size} ".encode("ascii") + data)
+                        if args in os.listdir(files_path):
+                            size = os.path.getsize(f"{files_path}/{args}")
+                            
+                            with open(f"{files_path}/{args}", "rb") as file:
+                                data = file.read()
+                            
+                            connectionSocket.send(f"{seq} ARQ {size} {data}".encode())   # [SEQ] ARQ <tam> <dados>
                         else:
-                            connectionSocket.send(f"{seq} ARQ {size} {data}".encode("ascii"))   # [SEQ] ARQ <tam> <dados>
-                        
+                            raise FileNotFoundError
                     except:
-                        connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK
+                        connectionSocket.send(f"{seq} NOK".encode())   # [SEQ] NOK
                 
                 elif command == "TERM":
                     # Comando TERM
@@ -113,14 +119,14 @@ while 1:
                     # Retorna [SEQ_NUM][REPLY]         <=> <seq> OK | <seq> NOK
                     try:
                         state = "waiting"
-                        connectionSocket.send(f"{seq} OK".encode("ascii"))   # [SEQ] OK
+                        connectionSocket.send(f"{seq} OK".encode())   # [SEQ] OK
                         connectionSocket.close()
                     except:
-                        connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK
+                        connectionSocket.send(f"{seq} NOK".encode())   # [SEQ] NOK
                 
                 # Quaisquer outro comando identificado que não seja os configurados neste servidor.
                 else:
-                    connectionSocket.send(f"{seq} NOK".encode("ascii"))   # [SEQ] NOK
+                    connectionSocket.send(f"{seq} NOK".encode())   # [SEQ] NOK
 
         except (KeyboardInterrupt, SystemExit):
             serverSocket.shutdown(SHUT_RDWR)

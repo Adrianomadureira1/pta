@@ -1,3 +1,8 @@
+# Informações do Aluno
+
+**Aluno:** Adriano Madureira dos Santos
+**Matrícula:** 202400480018
+
 # Dependências do Projeto
 
 Python Versão 3.8 ou mais atual instalada no sistema. A versão pode ser verificada por meio de:
@@ -36,7 +41,7 @@ O processo cliente de código fornecido pode ser executado pelo seguinte comando
 python pta-client.py 127.0.0.1 11550 user1
 ```
 
-Com o servidor em estado de operação e o Pytest instalado no ambiente virtual, é possível executar todos os testes elaborados para o PTA por meio do comando:
+Com o servidor em estado de operação e o Pytest instalado no ambiente virtual, é possível executar todos os testes elaborados para o PTA por meio do comando abaixo na pasta raiz:
 ```bash
 pytest -vv
 ```

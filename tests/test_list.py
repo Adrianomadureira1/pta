@@ -37,7 +37,7 @@ def client_socket():
 
     # Envia mensagem
 
-    clientSocket.send(message.encode("ascii"))
+    clientSocket.send(message.encode())
     
     returned_message, addr = clientSocket.recvfrom(2048)
 
@@ -54,7 +54,7 @@ def test_good_list(client_socket):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
     
@@ -68,7 +68,7 @@ def test_good_list(client_socket):
     
     assert expected_message == returned_message
     
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())
     
 def test_bad_list(client_socket, list_param):
     """Testes para falhar o LIST"""
@@ -78,7 +78,7 @@ def test_bad_list(client_socket, list_param):
 
     # Envia mensagem
 
-    client_socket.send(message.encode("ascii"))
+    client_socket.send(message.encode())
 
     # Mensagem de retorno esperada
 
@@ -90,4 +90,4 @@ def test_bad_list(client_socket, list_param):
     
     assert expected_message == returned_message
     
-    client_socket.send(f"0 TERM".encode("ascii"))
+    client_socket.send(f"0 TERM".encode())
